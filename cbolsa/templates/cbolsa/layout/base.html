@@ -25,6 +25,8 @@
                         
             {% if user.is_authenticated %}
                 <a href="{% url 'dashboard' %}">Dashboard</a>
+                <a href="{% url 'portafolio' %}">Portafolio</a>
+                <a href="{% url 'historial_transacciones' %}">Transacciones</a>
                 <a href="{% url 'perfil' %}">Mi Perfil</a>
                 <form method="POST" action="{% url 'logout' %}">
                     {% csrf_token %}

@@ -57,7 +57,9 @@ ROOT_URLCONF = 'corredores_bolsa.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / 'templates',  # Asegúrate de que tus plantillas estén en esta carpeta
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

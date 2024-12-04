@@ -1,0 +1,37 @@
+{% extends 'cbolsa/layout/base.html' %}
+{% block content %}
+<h2>Mi Portafolio</h2>
+
+<table>
+    <tr>
+        <th>Acción</th>
+        <th>Cantidad</th>
+        <th>Precio Actual</th>
+        <th>Valor Total</th>
+        <th>Acciones</th>
+    </tr>
+
+    {% for item in portafolio %}
+    <tr>
+        <td>{{ item.accion.nombre_empresa }} ({{ item.accion.simbolo }})</td>
+        <td>{{ item.cantidad }}</td>
+        <td>{{ item.accion.precio_actual }} USD</td>
+        <td>{{ item.valor_total|floatformat:2 }} USD</td>
+        <td>
+            {% if item.cantidad > 0 %}
+                <form action="{% url 'venta_accion' item.accion.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit">Vender</button>
+                </form>
+            {% else %}
+                <form action="{% url 'comprar_accion' item.accion.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit">Comprar</button>
+                </form>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

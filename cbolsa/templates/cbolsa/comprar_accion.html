@@ -1,0 +1,13 @@
+{% extends 'cbolsa/layout/base.html' %}
+{% block content %}
+<h2>Comprar Acción: {{ accion.nombre_empresa }} ({{ accion.simbolo }})</h2>
+<p>Precio Actual: {{ accion.precio_actual }} USD</p>
+<p>Saldo Disponible: {{ saldo_disponible }} USD</p>
+
+<form method="POST">
+    {% csrf_token %}
+    <label for="cantidad">Cantidad de acciones a comprar:</label>
+    <input type="number" name="cantidad" min="1" required>
+    <button type="submit">Comprar</button>
+</form>
+{% endblock %}
