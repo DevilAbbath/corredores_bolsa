@@ -1,0 +1,51 @@
+[
+    {
+      "model": "cbolsa.transaccion",
+      "pk": 1,
+      "fields": {
+        "usuario": 1,
+        "accion": 1,
+        "tipo_transaccion": "COMPRA",
+        "cantidad": 10,
+        "precio": "150.00",
+        "fecha_transaccion": "2024-12-04T00:00:00Z"
+      }
+    },
+    {
+      "model": "cbolsa.transaccion",
+      "pk": 2,
+      "fields": {
+        "usuario": 2,
+        "accion": 2,
+        "tipo_transaccion": "VENTA",
+        "cantidad": 5,
+        "precio": "2750.00",
+        "fecha_transaccion": "2024-12-04T00:00:00Z"
+      }
+    },
+    {
+      "model": "cbolsa.transaccion",
+      "pk": 3,
+      "fields": {
+        "usuario": 1,
+        "accion": 3,
+        "tipo_transaccion": "COMPRA",
+        "cantidad": 2,
+        "precio": "3400.00",
+        "fecha_transaccion": "2024-12-04T00:00:00Z"
+      }
+    },
+    {
+      "model": "cbolsa.transaccion",
+      "pk": 4,
+      "fields": {
+        "usuario": 2,
+        "accion": 4,
+        "tipo_transaccion": "VENTA",
+        "cantidad": 1,
+        "precio": "900.00",
+        "fecha_transaccion": "2024-12-04T00:00:00Z"
+      }
+    }
+  ]
+  

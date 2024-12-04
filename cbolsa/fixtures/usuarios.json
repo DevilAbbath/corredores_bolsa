@@ -1,0 +1,55 @@
+[
+    {
+      "model": "auth.user",
+      "pk": 2,
+      "fields": {
+        "username": "usuario1",
+        "password": "pbkdf2_sha256$870000$dUvIoEKWo7K2tdMkryrN4N$YL0RtonIxRor42h2gI8mFIutkoHFhQzzoxXfy+6UB5Q=",
+        "first_name": "",
+        "last_name": "",
+        "email": "usuario1@example.com",
+        "is_staff": false,
+        "is_active": true,
+        "is_superuser": false,
+        "last_login": "2024-12-04T00:00:00Z",
+        "date_joined": "2024-12-04T00:00:00Z"
+      }
+    },
+    {
+      "model": "auth.user",
+      "pk": 3,
+      "fields": {
+        "username": "usuario2",
+        "password": "pbkdf2_sha256$870000$dUvIoEKWo7K2tdMkryrN4N$YL0RtonIxRor42h2gI8mFIutkoHFhQzzoxXfy+6UB5Q=",
+        "first_name": "",
+        "last_name": "",
+        "email": "usuario2@example.com",
+        "is_staff": false,
+        "is_active": true,
+        "is_superuser": false,
+        "last_login": "2024-12-04T00:00:00Z",
+        "date_joined": "2024-12-04T00:00:00Z"
+      }
+    },
+    {
+      "model": "cbolsa.userprofile",
+      "pk": 2,
+      "fields": {
+        "user": 2,
+        "tipo_usuario": "regular",
+        "saldo": "750.00",
+        "fecha_registro": "2024-12-04T00:00:00Z"
+      }
+    },
+    {
+      "model": "cbolsa.userprofile",
+      "pk": 3,
+      "fields": {
+        "user": 3,
+        "tipo_usuario": "admin",
+        "saldo": "500.00",
+        "fecha_registro": "2024-12-04T00:00:00Z"
+      }
+    }
+  ]
+  

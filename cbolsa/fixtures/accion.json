@@ -1,0 +1,47 @@
+[
+    {
+      "model": "cbolsa.accion",
+      "pk": 1,
+      "fields": {
+        "simbolo": "AAPL",
+        "nombre_empresa": "Apple Inc.",
+        "precio_actual": "150.00",
+        "cambio_porcentual": "1.25",
+        "fecha_actualizacion": "2024-12-04T00:00:00Z"
+      }
+    },
+    {
+      "model": "cbolsa.accion",
+      "pk": 2,
+      "fields": {
+        "simbolo": "GOOGL",
+        "nombre_empresa": "Google LLC",
+        "precio_actual": "2750.00",
+        "cambio_porcentual": "0.50",
+        "fecha_actualizacion": "2024-12-04T00:00:00Z"
+      }
+    },
+    {
+      "model": "cbolsa.accion",
+      "pk": 3,
+      "fields": {
+        "simbolo": "AMZN",
+        "nombre_empresa": "Amazon.com",
+        "precio_actual": "3400.00",
+        "cambio_porcentual": "-0.20",
+        "fecha_actualizacion": "2024-12-04T00:00:00Z"
+      }
+    },
+    {
+      "model": "cbolsa.accion",
+      "pk": 4,
+      "fields": {
+        "simbolo": "TSLA",
+        "nombre_empresa": "Tesla Inc.",
+        "precio_actual": "900.00",
+        "cambio_porcentual": "2.00",
+        "fecha_actualizacion": "2024-12-04T00:00:00Z"
+      }
+    }
+  ]
+  
