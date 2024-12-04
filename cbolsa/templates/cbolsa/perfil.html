@@ -1,0 +1,35 @@
+{% extends 'cbolsa/layout/base.html' %}
+{% load static %}
+
+{% block content %}
+<section>
+    <h2>Tus Datos</h2>
+    <form method="post" action="{% url 'perfil' %}">
+        {% csrf_token %}
+        <label for="username">Nombre de Usuario:</label>
+        <input type="text" id="username" name="username" value="{{ user.username }}" readonly>
+        <br>
+        <label for="email">Correo Electrónico:</label>
+        <input type="email" id="email" name="email" value="{{ user.email }}">
+        <br>
+        <label for="saldo">Saldo:</label>
+        <input type="number" id="saldo" name="saldo" value="{{ user.userprofile.saldo }}">
+        <br>
+        <br>
+        <button type="submit">Guardar Cambios</button>
+    </form>
+
+    <!-- <form method="POST">
+        {% csrf_token %}
+        <label for="email">Email:</label>
+        <input type="email" name="email" id="email" value="{{ email }}" required>
+      
+        <label for="saldo">Saldo:</label>
+        <input type="number" name="saldo" id="saldo" step="0.01" value="{{ saldo }}" required>
+      
+        <label for="tipo_usuario">Tipo de Usuario:</label>
+              
+        <button type="submit">Guardar Cambios</button>
+      </form> -->
+</section>
+{% endblock %}

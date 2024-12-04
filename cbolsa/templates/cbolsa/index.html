@@ -1,0 +1,13 @@
+{% extends 'cbolsa/layout/base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>Home Portal</h1>
+    {% if user.is_authenticated %}
+        <h2>Logged, Buenas Tardes {{ user.first_name }}</h2>
+    {% else %}
+        <h3>Bienvenido a cbolsa</h3>
+        <p>Registrate para obtener la experiencia completa al sitio. <a href="{% url 'registro' %}">Crear Cuenta</a></p>
+        <p>Ya tienes Cuenta? . <a href="{% url 'login' %}">Iniciar sesión</a></p>
+    {% endif %}
+{% endblock %}
