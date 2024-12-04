@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
+from django.contrib.messages import get_messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseForbidden
 from django.db import models
@@ -33,15 +34,15 @@ def custom_login(request):
 
 def registro(request):
     if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            user = form.save()
+        formreg = CustomUserCreationForm(request.POST)
+        if formreg.is_valid():
+            formreg.save()
+            user = formreg.save()
             login(request, user)
             return redirect('index')  # Cambia a la URL que desees
     else:
-        form = CustomUserCreationForm()
-    return render(request, 'cbolsa/registro.html', {'form': form})
+        formreg = CustomUserCreationForm()
+    return render(request, 'cbolsa/registro.html', {'form': formreg})
 
 @login_required
 def editar_perfil(request):
@@ -69,7 +70,30 @@ def editar_perfil(request):
 # Dashboard View
 @login_required
 def dashboard_view(request):
-    return render(request, 'cbolsa/dashboard.html')
+    transacciones = Transaccion.objects.filter(usuario=request.user)
+    acciones = Accion.objects.all()
+    
+    # Calcular el portafolio del usuario (acciones que posee y su cantidad)
+    portafolio = []
+    for accion in acciones:
+        # Calcular cantidad de compras y ventas
+        compras = transacciones.filter(accion=accion, tipo_transaccion='COMPRA').aggregate(cantidad=models.Sum('cantidad'))['cantidad'] or 0
+        ventas = transacciones.filter(accion=accion, tipo_transaccion='VENTA').aggregate(cantidad=models.Sum('cantidad'))['cantidad'] or 0
+        cantidad = compras - ventas
+        valor_total = accion.precio_actual * cantidad  # Calcular el valor total de las acciones
+        
+        portafolio.append({
+            'accion': accion,
+            'cantidad': cantidad,
+            'valor_total': valor_total,
+            'compras': compras,
+            'ventas': ventas,
+        })
+    
+    return render(request, 'cbolsa/dashboard.html', {
+        'transacciones': transacciones,
+        'portafolio': portafolio,
+    })
 
 
 
@@ -98,9 +122,9 @@ def comprar_accion(request, accion_id):
             return redirect('comprar_accion', accion_id=accion_id)
 
         # Realizar la transacción
-        user_profile.saldo -= total_precio  # Descontar saldo
-        user_profile.save()
-
+        user_profile.saldo -= total_precio  # Descontar sald
+        user_profile.save()  # Guardar el perfil actualizado
+        
         # Crear registro de la transacción
         Transaccion.objects.create(
             usuario=request.user,
@@ -209,13 +233,12 @@ def ver_portafolio(request):
 # Historial Transacciones
 @login_required
 def historial_transacciones(request):
+    print(request.user)  # Verifica quién es el usuario logueado
     transacciones = Transaccion.objects.filter(usuario=request.user).order_by('-fecha_transaccion')
-
-    context = {
+    
+    return render(request, 'cbolsa/historial_transacciones.html', {
         'transacciones': transacciones,
-    }
-
-    return render(request, 'cbolsa/historial_transacciones.html', context)
+    })
 
 # Crear Acciones
 @login_required

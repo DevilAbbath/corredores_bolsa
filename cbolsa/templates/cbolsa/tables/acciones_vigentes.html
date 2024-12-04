@@ -1,0 +1,22 @@
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Acción</th>
+            <th>Precio Actual</th>
+            <th>Tasa Cambio</th>
+            <th>Valor Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in portafolio|slice:":10" %}
+        <tr>
+            <td>{{ item.accion.nombre_empresa }} ({{ item.accion.simbolo }})</td>
+            <td>{{ item.accion.precio_actual }} USD</td>
+            <td>{{ item.accion.cambio_porcentual }}%</td>
+            <td>{{ item.valor_total|floatformat:2 }} USD</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a class="btn btn-primary" href="{% url 'portafolio' %}">Ver Mas</a>

@@ -1,42 +1,53 @@
 {% extends 'cbolsa/layout/base.html' %}
+
 {% block content %}
-<h2>Mi Portafolio</h2>
-
-<table>
-    <tr>
-        <th>Acción</th>
-        <th>Precio Actual</th>
-        <th>Tasa Cambio</th>
-        <th>Valor Total</th>
-        <th>Acciones</th>
-    </tr>
-
-    {% for item in portafolio %}
-    <tr>
-        <td>{{ item.accion.nombre_empresa }} ({{ item.accion.simbolo }})</td>
-        <td>{{ item.accion.precio_actual }} USD</td>
-        <td>{{ item.accion.cambio_porcentual }}%</td>
-        <td>{{ item.valor_total|floatformat:2 }} USD</td>
-        <td>
-            {% if item.cantidad > 0 %}
-                <form action="{% url 'venta_accion' item.accion.id %}" method="POST">
-                    {% csrf_token %}
-                    <button type="submit">Vender</button>
-                </form>
-                <form action="{% url 'comprar_accion' item.accion.id %}" method="POST">
-                    {% csrf_token %}
-                    <button type="submit">Comprar</button>
-                </form>
-            {% endif %}
-            {% if  item.cantidad == 0 %}
-                <form action="{% url 'comprar_accion' item.accion.id %}" method="POST">
-                    {% csrf_token %}
-                    <button type="submit">Comprar</button>
-                </form>
-            {% endif %}
-        </td>
-    </tr>
-    {% endfor %}
-</table>
-
+<div class="container-fluid px-4">
+    <h2 class="mt-4">Acciones Vigentes</h2>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-briefcase me-1"></i> Acciones Vigentes
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Acción</th>
+                        <th>Precio Actual</th>
+                        <th>Tasa Cambio</th>
+                        <th>Valor Total</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in portafolio %}
+                    <tr>
+                        <td>{{ item.accion.nombre_empresa }} ({{ item.accion.simbolo }})</td>
+                        <td>{{ item.accion.precio_actual }} USD</td>
+                        <td>{{ item.accion.cambio_porcentual }}%</td>
+                        <td>{{ item.valor_total|floatformat:2 }} USD</td>
+                        <td>
+                            {% if item.cantidad > 0 %}
+                                <form action="{% url 'venta_accion' item.accion.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm">Vender</button>
+                                </form>
+                                <form action="{% url 'comprar_accion' item.accion.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-primary btn-sm">Comprar</button>
+                                </form>
+                            {% endif %}
+                            {% if item.cantidad == 0 %}
+                                <form action="{% url 'comprar_accion' item.accion.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-primary btn-sm">Comprar</button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -1,13 +1,28 @@
 {% extends 'cbolsa/layout/base.html' %}
-{% block content %}
-<h2>Comprar Acción: {{ accion.nombre_empresa }} ({{ accion.simbolo }})</h2>
-<p>Precio Actual: {{ accion.precio_actual }} USD</p>
-<p>Saldo Disponible: {{ saldo_disponible }} USD</p>
 
-<form method="POST">
-    {% csrf_token %}
-    <label for="cantidad">Cantidad de acciones a comprar:</label>
-    <input type="number" name="cantidad" min="1" required>
-    <button type="submit">Comprar</button>
-</form>
+{% block content %}
+<div class="container py-5">
+    <div class="card shadow">
+        <div class="card-header bg-dark text-white">
+            <h2 class="mb-0">Comprar Acción: {{ accion.nombre_empresa }} ({{ accion.simbolo }})</h2>
+        </div>
+        <div class="card-body">
+            <p><strong>Precio Actual:</strong> {{ accion.precio_actual }} USD</p>
+            <p><strong>Saldo Disponible:</strong> {{ saldo_disponible }} USD</p>
+
+            <form method="POST">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label for="cantidad" class="form-label"><strong>Cantidad de acciones a comprar:</strong></label>
+                    <input type="number" class="form-control" name="cantidad" min="1" required>
+                </div>
+
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary">Comprar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

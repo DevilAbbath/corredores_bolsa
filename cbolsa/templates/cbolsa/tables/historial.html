@@ -1,0 +1,24 @@
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Acción</th>
+            <th>Tipo</th>
+            <th>Cantidad</th>
+            <th>Precio</th>
+            <th>Fecha</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for transaccion in transacciones|slice:":10" %}
+        <tr>
+            <td>{{ transaccion.accion.nombre_empresa }} ({{ transaccion.accion.simbolo }})</td>
+            <td>{{ transaccion.tipo_transaccion }}</td>
+            <td>{{ transaccion.cantidad }}</td>
+            <td>{{ transaccion.precio }} USD</td>
+            <td>{{ transaccion.fecha_transaccion }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a class="btn btn-primary" href="{% url 'historial_transacciones' %}">Ver Mas</a>

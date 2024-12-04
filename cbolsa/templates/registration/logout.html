@@ -1,11 +1,16 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Cerrar Sesión</title>
-</head>
-<body>
-    <h1>Has cerrado sesión</h1>
-    <p>Gracias por usar nuestra aplicación. <a href="{% url 'login' %}">Inicia sesión de nuevo</a></p>
-    <p>Volver al <a href="{% url 'index' %}">Home</a></p>
-</body>
-</html>
+{% extends 'cbolsa/layout/base.html' %}
+
+{% block content %}
+<div class="container py-5 w-50">
+    <div class="card shadow">
+        <div class="card-header bg-dark text-white">
+            <h2 class="mb-0">Has cerrado sesión</h2>
+        </div>
+        <div class="card-body">
+            <p>Gracias por usar nuestra aplicación.</p>
+            <p><a href="{% url 'login' %}" class="btn btn-primary">Inicia sesión de nuevo</a></p>
+            <p><a href="{% url 'index' %}" class="btn btn-secondary">Volver al Home</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

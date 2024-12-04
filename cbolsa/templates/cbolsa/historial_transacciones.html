@@ -1,24 +1,36 @@
 {% extends 'cbolsa/layout/base.html' %}
+
 {% block content %}
-<h2>Historial de Transacciones</h2>
-
-<table>
-    <tr>
-        <th>Acción</th>
-        <th>Tipo</th>
-        <th>Cantidad</th>
-        <th>Precio</th>
-        <th>Fecha</th>
-    </tr>
-    {% for transaccion in transacciones %}
-    <tr>
-        <td>{{ transaccion.accion.nombre_empresa }} ({{ transaccion.accion.simbolo }})</td>
-        <td>{{ transaccion.tipo_transaccion }}</td>
-        <td>{{ transaccion.cantidad }}</td>
-        <td>{{ transaccion.precio }} USD</td>
-        <td>{{ transaccion.fecha_transaccion }}</td>
-    </tr>
-    {% endfor %}
-</table>
-
+<div class="container-fluid px-4">
+    <h2 class="mt-4">Historial de Transacciones</h2>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-history me-1"></i> Historial de Transacciones
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Acción</th>
+                        <th>Tipo</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transaccion in transacciones %}
+                    <tr>
+                        <td>{{ transaccion.accion.nombre_empresa }} ({{ transaccion.accion.simbolo }})</td>
+                        <td>{{ transaccion.tipo_transaccion }}</td>
+                        <td>{{ transaccion.cantidad }}</td>
+                        <td>{{ transaccion.precio }} USD</td>
+                        <td>{{ transaccion.fecha_transaccion }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -2,21 +2,57 @@
 {% load static %}
 
 {% block content %}
-<section>
-    <h2>Tus Datos</h2>
-    <form method="post" action="{% url 'perfil' %}">
-        {% csrf_token %}
-        <label for="username">Nombre de Usuario:</label>
-        <input type="text" id="username" name="username" value="{{ user.username }}" readonly>
-        <br>
-        <label for="email">Correo Electrónico:</label>
-        <input type="email" id="email" name="email" value="{{ user.email }}">
-        <br>
-        <label for="saldo">Saldo:</label>
-        <input type="number" id="saldo" name="saldo" value="{{ user.userprofile.saldo }}">
-        <br>
-        <br>
-        <button type="submit">Guardar Cambios</button>
-    </form>
-</section>
+<div class="container py-5">
+    <div class="card shadow">
+        <div class="card-header bg-dark text-white">
+            <h2 class="mb-0">Editar Perfil</h2>
+        </div>
+        <div class="card-body">
+            <form method="post" action="{% url 'perfil' %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="username" class="form-label">Nombre de Usuario</label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username" 
+                        class="form-control" 
+                        value="{{ user.username }}" 
+                        readonly
+                    >
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Correo Electrónico</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        class="form-control" 
+                        value="{{ user.email }}"
+                        required
+                    >
+                </div>
+                <div class="mb-3">
+                    <label for="saldo" class="form-label">Saldo</label>
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input 
+                            type="number" 
+                            id="saldo" 
+                            name="saldo" 
+                            class="form-control" 
+                            value="{{ user.userprofile.saldo }}" 
+                            step="0.01"
+                            min="0"
+                            required
+                        >
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-success">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

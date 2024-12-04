@@ -1,13 +1,44 @@
 {% extends 'cbolsa/layout/base.html' %}
+
 {% block content %}
-<h1>Crear Nueva Acción</h1>
-{% if request.user.userprofile.tipo_usuario == 'admin' %}
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Crear Acción</button>
-    </form>
-{% else %}
-    <p class="text-danger">No tienes permisos para crear acciones.</p>
-{% endif %}
+<div class="container py-5">
+    <div class="card shadow">
+        <div class="card-header bg-dark text-white">
+            <h2 class="mb-0">Crear Nueva Acción</h2>
+        </div>
+        <div class="card-body">
+            {% if request.user.userprofile.tipo_usuario == 'admin' %}
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.simbolo.id_for_label }}" class="form-label">Símbolo</label>
+                        <input type="text" name="simbolo" id="{{ form.simbolo.id_for_label }}" class="form-control" value="" placeholder="SYMTEC">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.nombre_empresa.id_for_label }}" class="form-label">Nombre de la Empresa</label>
+                        <input type="text" name="nombre_empresa" id="{{ form.nombre_empresa.id_for_label }}" class="form-control" value="" placeholder="Cobol S.A">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.precio_actual.id_for_label }}" class="form-label">Precio Actual</label>
+                        <input type="number" name="precio_actual" id="{{ form.precio_actual.id_for_label }}" class="form-control" value="" step="0.01" min="0">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.cambio_porcentual.id_for_label }}" class="form-label">Cambio Porcentual</label>
+                        <input type="number" name="cambio_porcentual" id="{{ form.cambio_porcentual.id_for_label }}" class="form-control" value="" step="0.01" min="0">
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary">Crear Acción</button>
+                    </div>
+                </form>
+            {% else %}
+                <p class="text-danger">No tienes permisos para crear acciones.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
 {% endblock %}
