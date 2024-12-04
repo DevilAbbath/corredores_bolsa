@@ -1,11 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
-from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponseForbidden
 from django.db import models
 from .models import UserProfile, Accion, Transaccion
-from django.contrib import messages
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, AccionForm
 
 # Create your views here.
 def index(request):
@@ -64,10 +65,12 @@ def editar_perfil(request):
     return render(request, 'cbolsa/perfil.html')
 
 
+
 # Dashboard View
 @login_required
 def dashboard_view(request):
     return render(request, 'cbolsa/dashboard.html')
+
 
 
 # Compra de Acciones
@@ -116,7 +119,6 @@ def comprar_accion(request, accion_id):
     }
     return render(request, 'cbolsa/comprar_accion.html', context)
 
-
 # Venta de Acciones
 @login_required
 def venta_accion(request, accion_id):
@@ -124,45 +126,54 @@ def venta_accion(request, accion_id):
     user_profile = UserProfile.objects.get(user=request.user)
 
     if request.method == 'POST':
-        cantidad_str = request.POST.get('cantidad')  # Obtener la cantidad del formulario
-
-        if not cantidad_str:  # Verificar si el campo de cantidad está vacío
-            messages.error(request, "Debes ingresar una cantidad válida.")
+        cantidad_str = request.POST.get('cantidad', "").strip()
+        if not cantidad_str.isdigit():
+            messages.error(request, "Por favor, ingresa una cantidad válida.")
             return redirect('venta_accion', accion_id=accion_id)
 
-        try:
-            cantidad = int(cantidad_str)  # Convertir la cantidad a entero
-        except ValueError:
-            messages.error(request, "La cantidad debe ser un número válido.")
-            return redirect('venta_accion', accion_id=accion_id)
+        cantidad = int(cantidad_str)
 
-        # Verificar si el usuario tiene suficientes acciones
         transacciones = Transaccion.objects.filter(usuario=request.user, accion=accion, tipo_transaccion='COMPRA')
         cantidad_comprada = sum([t.cantidad for t in transacciones])
+        cantidad_vendida = sum(
+            [t.cantidad for t in Transaccion.objects.filter(usuario=request.user, accion=accion, tipo_transaccion='VENTA')]
+        )
+        cantidad_disponible = cantidad_comprada - cantidad_vendida
 
-        if cantidad > cantidad_comprada:
+        if cantidad > cantidad_disponible:
             messages.error(request, "No tienes suficientes acciones para vender.")
             return redirect('venta_accion', accion_id=accion_id)
 
-        # Realizar la transacción
-        user_profile.saldo += accion.precio_actual * cantidad
+        precio_venta = accion.precio_actual * (1 + accion.cambio_porcentual / 100)
+
+        user_profile.saldo += precio_venta * cantidad
         user_profile.save()
 
-        # Registrar la venta
         Transaccion.objects.create(
             usuario=request.user,
             accion=accion,
             tipo_transaccion='VENTA',
             cantidad=cantidad,
-            precio=accion.precio_actual,
+            precio=precio_venta,
         )
 
-        messages.success(request, f"Venta realizada con éxito. Has vendido {cantidad} acciones de {accion.nombre_empresa}.")
+        messages.success(
+            request,
+            f"Venta realizada con éxito. Has vendido {cantidad} acciones de {accion.nombre_empresa} a {precio_venta:.2f} cada una."
+        )
         return redirect('perfil')
+
+    transacciones = Transaccion.objects.filter(usuario=request.user, accion=accion, tipo_transaccion='COMPRA')
+    cantidad_comprada = sum([t.cantidad for t in transacciones])
+    cantidad_vendida = sum(
+        [t.cantidad for t in Transaccion.objects.filter(usuario=request.user, accion=accion, tipo_transaccion='VENTA')]
+    )
+    cantidad_disponible = cantidad_comprada - cantidad_vendida
 
     context = {
         'accion': accion,
         'saldo_disponible': user_profile.saldo,
+        'cantidad_disponible': cantidad_disponible,
     }
     return render(request, 'cbolsa/venta_accion.html', context)
 
@@ -179,16 +190,21 @@ def ver_portafolio(request):
     # Calcular el portafolio del usuario (acciones que posee y su cantidad)
     portafolio = []
     for accion in acciones:
-        cantidad = transacciones.filter(accion=accion).aggregate(cantidad=models.Sum('cantidad'))['cantidad'] or 0
-        valor_total = accion.precio_actual * cantidad  # Realizar el cálculo aquí
+        # Calcular cantidad de compras y ventas
+        compras = transacciones.filter(accion=accion, tipo_transaccion='COMPRA').aggregate(cantidad=models.Sum('cantidad'))['cantidad'] or 0
+        ventas = transacciones.filter(accion=accion, tipo_transaccion='VENTA').aggregate(cantidad=models.Sum('cantidad'))['cantidad'] or 0
+        cantidad = compras - ventas
+        valor_total = accion.precio_actual * cantidad  # Calcular el valor total de las acciones
+        
         portafolio.append({
             'accion': accion,
             'cantidad': cantidad,
             'valor_total': valor_total,
+            'compras': compras,
+            'ventas': ventas,
         })
     
     return render(request, 'cbolsa/portafolio.html', {'portafolio': portafolio})
-
 
 # Historial Transacciones
 @login_required
@@ -200,3 +216,22 @@ def historial_transacciones(request):
     }
 
     return render(request, 'cbolsa/historial_transacciones.html', context)
+
+# Crear Acciones
+@login_required
+def crear_accion(request):
+    # Validar si el usuario es administrador
+    user_profile = get_object_or_404(UserProfile, user=request.user)
+    if user_profile.tipo_usuario != 'admin':
+        return HttpResponseForbidden("No tienes permisos para crear acciones.")
+
+    if request.method == 'POST':
+        form = AccionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Acción creada exitosamente.")
+            return redirect('dashboard')
+    else:
+        form = AccionForm()
+
+    return render(request, 'cbolsa/crear_accion.html', {'form': form})

@@ -1,14 +1,15 @@
 {% extends 'cbolsa/layout/base.html' %}
 {% block content %}
-<h2>Vender Acción: {{ accion.nombre_empresa }} ({{ accion.simbolo }})</h2>
-<p>Precio Actual: {{ accion.precio_actual }} USD</p>
-<p>Saldo Disponible: {{ saldo_disponible }} USD</p>
+<h2>Venta de acciones</h2>
+<p><strong>Acción:</strong> {{ accion.nombre_empresa }} ({{ accion.simbolo }})</p>
+<p><strong>Precio actual:</strong> {{ accion.precio_actual }}</p>
+<p><strong>Cantidad disponible para la venta:</strong> {{ cantidad_disponible }}</p>
+<p><strong>Saldo disponible:</strong> {{ saldo_disponible }}</p>
 
-<form method="POST">
+<form method="post" action="{% url 'venta_accion' accion.id %}">
     {% csrf_token %}
-    <label for="cantidad">Cantidad de acciones a vender:</label>
-    <input type="number" name="cantidad" min="1" required>
-    <button type="submit">Vender</button>
+    <label for="cantidad">Cantidad a vender:</label>
+    <input type="number" name="cantidad" id="cantidad" min="1" max="{{ cantidad_disponible }}" required>
+    <button type="submit" class="btn btn-danger">Vender</button>
 </form>
-
 {% endblock %}

@@ -5,8 +5,8 @@
 <table>
     <tr>
         <th>Acción</th>
-        <th>Cantidad</th>
         <th>Precio Actual</th>
+        <th>Tasa Cambio</th>
         <th>Valor Total</th>
         <th>Acciones</th>
     </tr>
@@ -14,8 +14,8 @@
     {% for item in portafolio %}
     <tr>
         <td>{{ item.accion.nombre_empresa }} ({{ item.accion.simbolo }})</td>
-        <td>{{ item.cantidad }}</td>
         <td>{{ item.accion.precio_actual }} USD</td>
+        <td>{{ item.accion.cambio_porcentual }}%</td>
         <td>{{ item.valor_total|floatformat:2 }} USD</td>
         <td>
             {% if item.cantidad > 0 %}
@@ -23,7 +23,12 @@
                     {% csrf_token %}
                     <button type="submit">Vender</button>
                 </form>
-            {% else %}
+                <form action="{% url 'comprar_accion' item.accion.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit">Comprar</button>
+                </form>
+            {% endif %}
+            {% if  item.cantidad == 0 %}
                 <form action="{% url 'comprar_accion' item.accion.id %}" method="POST">
                     {% csrf_token %}
                     <button type="submit">Comprar</button>

@@ -1,0 +1,13 @@
+{% extends 'cbolsa/layout/base.html' %}
+{% block content %}
+<h1>Crear Nueva Acción</h1>
+{% if request.user.userprofile.tipo_usuario == 'admin' %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Crear Acción</button>
+    </form>
+{% else %}
+    <p class="text-danger">No tienes permisos para crear acciones.</p>
+{% endif %}
+{% endblock %}
